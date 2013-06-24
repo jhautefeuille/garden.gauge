@@ -121,7 +121,7 @@ class GaugeApp(App):
                 print(s.value)
             
             box = BoxLayout(orientation='vertical', spacing=10, padding=10)
-            gauge = Gauge(value=50, size_gauge=256, size_text=18)
+            gauge = Gauge(value=50, size_gauge=180, size_text=18)
             box.add_widget(gauge)
             
             s = Slider(min=0, max=100, value=50)
