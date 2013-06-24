@@ -96,8 +96,9 @@ class Gauge(Widget):
         self._needle.center = self._gauge.center
         self._glab.center_x = self._gauge.center_x
         self._glab.center_y = self._gauge.center_y + (self.size_gauge/4)
-        self._progress.center_x = self._gauge.center_x
-        self._progress.center_y = self._gauge.center_y + (self.size_gauge/2)
+        self._progress.x = self._gauge.x
+        self._progress.y = self._gauge.y + (self.size_gauge / 4)
+        self._progress.width = self.size_gauge
 
     def _turn(self, *args):
         '''
