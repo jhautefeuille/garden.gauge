@@ -32,7 +32,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
 from kivy.uix.scatter import Scatter
 from kivy.uix.image import Image
-from kivy.uix.slider import Slider
+from kivy.uix.label import Label
+from kivy.uix.progressbar import ProgressBar
 
 class Gauge(Widget):
     '''
@@ -45,10 +46,11 @@ class Gauge(Widget):
     file_gauge = StringProperty("cadran.png")
     file_needle = StringProperty("needle.png")
     size_gauge = BoundedNumericProperty(128, min=128, max=256, errorvalue=128)
+    size_text = NumericProperty(10)
 
     def __init__(self, **kwargs):
         super(Gauge, self).__init__(**kwargs)
-        
+            
         self._gauge = Scatter(
             size=(self.size_gauge, self.size_gauge),
             do_rotate=False, 
@@ -69,11 +71,16 @@ class Gauge(Widget):
         _img_needle = Image(source=self.file_needle, size=(self.size_gauge, 
             self.size_gauge))
 
+        self._glab = Label(font_size=self.size_text, markup=True)
+        self._progress = ProgressBar(max=100, height=20, value=self.value)
+       
         self._gauge.add_widget(_img_gauge)
         self._needle.add_widget(_img_needle)
         
         self.add_widget(self._gauge)
         self.add_widget(self._needle)
+        self.add_widget(self._glab)
+        self.add_widget(self._progress)
 
         self.bind(pos=self._update)
         self.bind(size=self._update)
@@ -84,8 +91,13 @@ class Gauge(Widget):
         Update gauge and needle positions after sizing or positioning.
 
         '''
-        self._gauge.pos = (self.x, self.y)
+        self._gauge.pos = self.pos
         self._needle.pos = (self.x, self.y)
+        self._needle.center = self._gauge.center
+        self._glab.center_x = self._gauge.center_x
+        self._glab.center_y = self._gauge.center_y + (self.size_gauge/4)
+        self._progress.center_x = self._gauge.center_x
+        self._progress.center_y = self._gauge.center_y + (self.size_gauge/2)
 
     def _turn(self, *args):
         '''
@@ -95,17 +107,20 @@ class Gauge(Widget):
         self._needle.center_x = self._gauge.center_x
         self._needle.center_y = self._gauge.center_y
         self._needle.rotation = (50 * self.unit) - (self.value * self.unit)
+        self._glab.text = "[b]{0:.0f}[/b]".format(self.value)
+        self._progress.value = self.value
 
 
 class GaugeApp(App):
         def build(self):
+            from kivy.uix.slider import Slider
 
             def test(*ars):
                 gauge.value = s.value
                 print(s.value)
             
-            box = BoxLayout(orientation='vertical', spacing=0, padding=0)
-            gauge = Gauge(value=50, size_gauge=256)
+            box = BoxLayout(orientation='vertical', spacing=10, padding=10)
+            gauge = Gauge(value=50, size_gauge=256, size_text=18)
             box.add_widget(gauge)
             
             s = Slider(min=0, max=100, value=50)
