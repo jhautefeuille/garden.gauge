@@ -32,7 +32,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
 from kivy.uix.scatter import Scatter
 from kivy.uix.image import Image
-from kivy.uix.label import Label
+from kivy.uix.slider import Slider
 
 class Gauge(Widget):
     '''
@@ -74,12 +74,10 @@ class Gauge(Widget):
         
         self.add_widget(self._gauge)
         self.add_widget(self._needle)
-        self.add_widget(Label(text='Made with Kivy'))
 
         self.bind(pos=self._update)
         self.bind(size=self._update)
-
-        Clock.schedule_interval(self._turn, 0)
+        self.bind(value=self._turn)
         
     def _update(self, *args):
         '''
@@ -98,15 +96,22 @@ class Gauge(Widget):
         self._needle.center_y = self._gauge.center_y
         self._needle.rotation = (50 * self.unit) - (self.value * self.unit)
 
+
 class GaugeApp(App):
         def build(self):
-            import psutil
-            def refresh(*args):
-                gauge.value = psutil.cpu_percent(interval=1)
-            box = BoxLayout(orientation='horizontal', spacing=0, padding=0)
+
+            def test(*ars):
+                gauge.value = s.value
+                print(s.value)
+            
+            box = BoxLayout(orientation='vertical', spacing=0, padding=0)
             gauge = Gauge(value=50, size_gauge=256)
             box.add_widget(gauge)
-            Clock.schedule_interval(refresh, 0)
+            
+            s = Slider(min=0, max=100, value=50)
+            s.bind(value=test)
+            box.add_widget(s)
+            
             return box
             
 if __name__ in ('__main__'):
