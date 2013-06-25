@@ -14,7 +14,7 @@ Source svg file provided for customing.
 
 '''
 
-__all__ = ('Gauge')
+__all__ = ('Gauge',)
 
 __title__ = 'garden.gauge'
 __version__ = '0.1'
@@ -118,17 +118,32 @@ class GaugeApp(App):
 
             def test(*ars):
                 gauge.value = s.value
+              
+                print(s.value)
+
+            def test_(*ars):
+          
+                gauge_.value = s1.value
                 print(s.value)
             
+            
             box = BoxLayout(orientation='vertical', spacing=10, padding=10)
-            gauge = Gauge(value=50, size_gauge=180, size_text=18)
+            gauge = Gauge(value=50, size_gauge=256, size_text=9)
+            gauge_ = Gauge(value=50, size_gauge=256, size_text=19)
+    
             box.add_widget(gauge)
+            box.add_widget(gauge_)
             
             s = Slider(min=0, max=100, value=50)
             s.bind(value=test)
             box.add_widget(s)
+
+            s1 = Slider(min=0, max=100, value=50)
+            s1.bind(value=test_)
+            box.add_widget(s1)
+ 
             
             return box
             
-if __name__ in ('__main__'):
+if __name__ == '__main__':
     GaugeApp().run()
