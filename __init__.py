@@ -53,7 +53,7 @@ class Gauge(Widget):
             
         self._gauge = Scatter(
             size=(self.size_gauge, self.size_gauge),
-            do_rotate=False, 
+            do_rotation=False, 
             do_scale=False,
             do_translation=False
             )
@@ -63,7 +63,7 @@ class Gauge(Widget):
 
         self._needle = Scatter(
             size=(self.size_gauge, self.size_gauge),
-            do_rotate=False,
+            do_rotation=False,
             do_scale=False,
             do_translation=False
             )
